@@ -126,7 +126,7 @@ void eingabe_versuch(char versuch[], int wortlaenge)
 }
 
 //======================================================//
-
+/*
 // Vergleicht 'versuch' mit 'auswahl'
 // Vergibt entsprechend Punkte entsprechend Makros
 // Speichert Summe Punkte in 'wertung'
@@ -156,6 +156,79 @@ int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[])
             }
         }
     }
+
+    return wertung;
+}
+*/
+
+// Function to count occurrences of each letter in a word
+void countOccurrences(char word[], int wortlaenge, int zaehler[])
+{
+    for (int i = 0; i < wortlaenge; i++)
+    {
+        zaehler[word[i] - 'a']++;
+    }
+}
+
+// Function to handle correct positions (green) and mark them
+int handleCorrectPositions(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int versuch_zaehler[], int wortlaenge)
+{
+    int wertung = 0;
+    for (int i = 0; i < wortlaenge; i++)
+    {
+        if (versuch[i] == auswahl[i] && auswahl_zaehler[versuch[i] - 'a'] > 0)
+        {
+            status[i] = TREFFER;
+            wertung += TREFFER;
+            auswahl_zaehler[versuch[i] - 'a']--;
+            versuch_zaehler[versuch[i] - 'a']--;
+        }
+    }
+    return wertung;
+}
+
+// Function to handle partially correct positions (yellow) for letters that are in the selected word but not in the correct position
+int handlePartiallyCorrectPositions(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge)
+{
+    int wertung = 0;
+    for (int i = 0; i < wortlaenge; i++)
+    {
+        if (status[i] != TREFFER && auswahl_zaehler[versuch[i] - 'a'] > 0)
+        {
+            status[i] = FAST;
+            wertung += FAST;
+            auswahl_zaehler[versuch[i] - 'a']--;
+        }
+    }
+    return wertung;
+}
+
+// Function to handle incorrect positions (red)
+void handleIncorrectPositions(char versuch[], int status[], int versuch_zaehler[], int wortlaenge)
+{
+    for (int i = 0; i < wortlaenge; i++)
+    {
+        if (status[i] == 0 && versuch_zaehler[versuch[i] - 'a'] > 0)
+        {
+            status[i] = FALSCH;
+            versuch_zaehler[versuch[i] - 'a']--;
+        }
+    }
+}
+
+// Main function to check the word
+int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[])
+{
+    int wertung = 0;
+    int auswahl_zaehler[26] = {0};
+    int versuch_zaehler[26] = {0};
+
+    countOccurrences(auswahl, wortlaenge, auswahl_zaehler);
+    countOccurrences(versuch, wortlaenge, versuch_zaehler);
+
+    wertung += handleCorrectPositions(versuch, auswahl, status, auswahl_zaehler, versuch_zaehler, wortlaenge);
+    wertung += handlePartiallyCorrectPositions(versuch, auswahl, status, auswahl_zaehler, wortlaenge);
+    handleIncorrectPositions(versuch, status, versuch_zaehler, wortlaenge);
 
     return wertung;
 }
