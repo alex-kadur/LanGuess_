@@ -1,4 +1,4 @@
-[see English README](#_)
+[English](#_)
 
 # LexiGuess_
 
