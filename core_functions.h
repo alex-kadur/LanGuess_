@@ -3,15 +3,15 @@
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
-#include "utilities.h"
+#include "utility_functions.h"
 
 // Jede Textdatei beinhalted exakt LISTELAENGE Woerter
 #define LISTELAENGE 50
 
 // Werte fuer Farben und wertung
-// TREFFER == right letter, right place;
-// FAST == right letter, FALSCH place;
-// FALSCH == FALSCH letter
+// TREFFER == korrekter Buchstabe an korrekter Position; priorisierte Darstellung
+// FAST == Buchstabe kommt an abweichender Position vor; beruecksichtigt Anzahl Vorkommen; nachrangige Darstellung
+// FALSCH == Buchstabe kommt nicht im Wort vor; Default-Wert
 #define TREFFER 2
 #define FAST 1
 #define FALSCH 0
@@ -29,6 +29,9 @@ void ausgabe_titel();
 void eingabe_wortlaenge(int *wortlaenge);
 int eingabe_auswahl(int wortlaenge, char auswahl[]);
 void eingabe_versuch(char versuch[], int wortlaenge);
+void zaehle_buchstabe(char wort[], int wortlaenge, int zaehler[]);
+int verarbeite_korrekt(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge);
+int verarbeite_fast(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge);
 int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[]);
 void ausgabe_wort(char versuch[], int wortlaenge, int status[]);
 void ausgabe_ergebnis(int gewonnen, char auswahl[]);
@@ -126,110 +129,97 @@ void eingabe_versuch(char versuch[], int wortlaenge)
 }
 
 //======================================================//
-/*
-// Vergleicht 'versuch' mit 'auswahl'
-// Vergibt entsprechend Punkte entsprechend Makros
-// Speichert Summe Punkte in 'wertung'
-int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[])
-{
-    int wertung = 0;
 
-    // Prueft jeden Buchstaben ...
-    for (int i = 0; i < wortlaenge; i++)
-    {
-        // ... auf Treffer an exakter Position
-        if (versuch[i] == auswahl[i])
-        {
-            status[i] = TREFFER;
-            wertung += TREFFER;
-            continue;
-        }
-
-        // ... auf treffer an abweichender Position
-        for (int j = 0; j < wortlaenge; j++)
-        {
-            if (versuch[i] == auswahl[j])
-            {
-                status[i] = FAST;
-                wertung += FAST;
-                continue;
-            }
-        }
-    }
-
-    return wertung;
-}
-*/
-
-// Function to count occurrences of each letter in a word
-void countOccurrences(char word[], int wortlaenge, int zaehler[])
+// Hilfsfunktion fuer pruefe_wort()
+// Zaehlt das vorkommen der Buchstaben in einem Wort
+// Zahlt elemente im Arry 'zaehler[]' hoch
+void zaehle_buchstabe(char wort[], int wortlaenge, int zaehler[])
 {
     for (int i = 0; i < wortlaenge; i++)
     {
-        zaehler[word[i] - 'a']++;
+        // Bestimmt position Buchstabe im Alphabet/Arry ueber ASCII-Werte
+        // Bsp. wort[i] == 'b'; 'b' - 'a' = 1; 'b' steht an position 1
+        zaehler[wort[i] - 'a']++;
     }
 }
 
-// Function to handle correct positions (green) and mark them
-int handleCorrectPositions(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int versuch_zaehler[], int wortlaenge)
+// Hilfsfunktion fuer pruefe_wort()
+// Vergleicht Buchstabe fuer Buchstabe 'auswahl' und 'versuch' ...
+// ... und sucht nach TREFFER.
+// Passt 'status' der Positionen mit TREFFER an
+// Reduziert Buchstabenzahler um Anzahl TREFFER
+// Gibt Gesamtwertung fuer alle TREFFER zurueck
+int verarbeite_korrekt(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge)
 {
     int wertung = 0;
     for (int i = 0; i < wortlaenge; i++)
     {
+        // Bedingung: Buchstabe[i] im 'versuch' == Buchstabe[i] in 'auswahl' ...
+        // ... und verbleibende Anzahl Buchstabe (gleich mit Buchstabe[i] im 'versuch') in 'auswahl_zaehler' > 0
         if (versuch[i] == auswahl[i] && auswahl_zaehler[versuch[i] - 'a'] > 0)
         {
+            // Position[i] als TREFFER (2) definiert
             status[i] = TREFFER;
+            // 'wertung' um TREFFER (2) erhoeht
             wertung += TREFFER;
+            // verbleibende Anzahl Buchstabe (gleich mit Buchstabe[i] im 'versuch') in 'auswahl_zaehler' um 1 verringert
             auswahl_zaehler[versuch[i] - 'a']--;
-            versuch_zaehler[versuch[i] - 'a']--;
         }
     }
+    // Gibt Summe der 'wertung' fuer alle TREFFER zurueck
     return wertung;
 }
 
-// Function to handle partially correct positions (yellow) for letters that are in the selected word but not in the correct position
-int handlePartiallyCorrectPositions(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge)
+// Hilfsfunktion fuer pruefe_wort()
+// Prueft Buchstabe fuer Buchstabe alle 'position' die kein TREFFER ...
+// ... und sucht nach FAST d.h. Buchstabenwert der Position kommt im Wort vor ('auswahl_zahler' > 0)
+// Passt 'status' der Positionen mit FAST an
+// Reduziert Buchstabenzahler um Anzahl FAST
+// Gibt Gesamtwertung fuer alle FAST zurueck
+int verarbeite_fast(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge)
 {
     int wertung = 0;
     for (int i = 0; i < wortlaenge; i++)
     {
+        // Bedingung: status Buchstabe[i] nicht TREFFER ...
+        // ... und verbleibende Anzahl Buchstabe (gleich mit Buchstabe[i] im 'versuch') in 'auswahl_zaehler' > 0
         if (status[i] != TREFFER && auswahl_zaehler[versuch[i] - 'a'] > 0)
         {
+            // Position[i] als FAST (1) definiert
             status[i] = FAST;
+            // 'wertung' um FAST (1) erhoeht
             wertung += FAST;
+            // verbleibende Anzahl Buchstabe (gleich mit Buchstabe[i] im 'versuch') in 'auswahl_zaehler' um 1 verringert
             auswahl_zaehler[versuch[i] - 'a']--;
         }
     }
+    // Gibt Summe der 'wertung' fuer alle FAST zurueck
     return wertung;
 }
 
-// Function to handle incorrect positions (red)
-void handleIncorrectPositions(char versuch[], int status[], int versuch_zaehler[], int wortlaenge)
-{
-    for (int i = 0; i < wortlaenge; i++)
-    {
-        if (status[i] == 0 && versuch_zaehler[versuch[i] - 'a'] > 0)
-        {
-            status[i] = FALSCH;
-            versuch_zaehler[versuch[i] - 'a']--;
-        }
-    }
-}
-
-// Main function to check the word
+// Hauptfunktion zum Vergleich von 'versuch' und 'auswahl'
+// Vergibt entsprechende Werte fuer KORREKT und FAST in 'status'
+// Gibt Gesamtwertung entsprechend Vorkommen von KORREKT und FAST zurueck
 int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[])
 {
     int wertung = 0;
+
+    // Initialisiert Zaehler-Array mit allen Elementen Wert 0;
+    // 26 um alle Buchstaben Alphabet zu enthalten
     int auswahl_zaehler[26] = {0};
-    int versuch_zaehler[26] = {0};
 
-    countOccurrences(auswahl, wortlaenge, auswahl_zaehler);
-    countOccurrences(versuch, wortlaenge, versuch_zaehler);
+    // Zahlt Vorkommen einzelner Elemente/Buchstaben in Arrays 'auswahl' und 'versuch'
+    // Ueber 'auswahl_zaehler' und 'versuch_zaehler' hochgezaehlt
+    zaehle_buchstabe(auswahl, wortlaenge, auswahl_zaehler);
 
-    wertung += handleCorrectPositions(versuch, auswahl, status, auswahl_zaehler, versuch_zaehler, wortlaenge);
-    wertung += handlePartiallyCorrectPositions(versuch, auswahl, status, auswahl_zaehler, wortlaenge);
-    handleIncorrectPositions(versuch, status, versuch_zaehler, wortlaenge);
+    // Vergleicht 'versuch' und 'auswahl' im Hinlick auf KORREKT und FAST...
+    // Verarbeitung von FALSCH unnoetig, da 'status' ohnehin mit 0 initialisiert
+    // Vergibt entsprechende Werte in 'status'
+    // Erhoeht Gesamtwertung 'wertung' um Teilwertungen aus Rueckgabe
+    wertung += verarbeite_korrekt(versuch, auswahl, status, auswahl_zaehler, wortlaenge);
+    wertung += verarbeite_fast(versuch, auswahl, status, auswahl_zaehler, wortlaenge);
 
+    // Gibt Gesamtwertung zurueck
     return wertung;
 }
 

@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 void ausgabe_linie(int lenght);
 void leere_eingabepuffer(void);
 int neue_runde(char *text);
@@ -8,6 +6,7 @@ void leere_screen(void);
 
 //======================================================//
 
+// Gibt eine Linie mit Breite entsprechend Uebergabewert aus
 void ausgabe_linie(int laenge)
 {
     if (laenge < 0)
@@ -25,6 +24,7 @@ void ausgabe_linie(int laenge)
 
 //======================================================//
 
+// Leert den Eingabepuffer
 void leere_eingabepuffer()
 {
     int c;
@@ -34,6 +34,10 @@ void leere_eingabepuffer()
 
 //======================================================//
 
+// Gibt String entsprechend Uebergabewert aus
+// Fordert Nutzer zur Eingabe (j/n) auf
+// Rueckgabewert 1 falls 'j' oder 'J'
+// Sonst Rueckgabewert 0
 int neue_runde(char *text)
 {
     char temp;
@@ -49,6 +53,7 @@ int neue_runde(char *text)
 
 //======================================================//
 
+// Wandelt Zeichen im Uebergabe-Array von Gross- zu Kleinbuchstaben um
 void umwandlung_kleinbuchstaben(char input[])
 {
     for (int i = 0; input[i] != '\0'; i++)
@@ -64,6 +69,7 @@ void umwandlung_kleinbuchstaben(char input[])
 
 //======================================================//
 
+// Leert den Bildschirm unabhaengig vom Betriebssystem
 void leere_screen(void)
 {
 #ifdef _WIN32

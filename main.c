@@ -1,4 +1,16 @@
-#include "functions.h"
+#include "core_functions.h"
+
+// Gibt Titel aus
+// Fragt Laenge des Wortes fuer aktuelle Runde ab (5, 6, 7 oder 8)
+// Waehlt (pseudo)zufaellig ein Wort aus einer vorgegebenen Textdatei aus
+// Startet eine Schleife mit max. Wortlaenge + 1 Durchlaufen
+// Pro Durchlauf:
+// Fordert Nutzer zur Eingabe eines Wortes auf
+// Vergibt zunaechst fuer jede Position im Wort den Status FALSCH
+// Vergleicht Nutzereingabe mit Zufallswort dieser Runde
+// Fuer jede Position im Wort:
+// Aktualisiert Status entsprechend KORREKT oder FAST (siehe Kommentare zur funktion)
+// Aktualisiert Gesamtwertung entsprechend
 
 int main(void)
 {
