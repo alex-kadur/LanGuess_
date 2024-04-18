@@ -191,7 +191,7 @@ The game logic revolves around the following steps:
 
 ## Author
 
-LExiGuess_ was created by Alexander Kadur.
+LexiGuess_ was created by Alexander Kadur.
 
 ## Acknowledgements
 
