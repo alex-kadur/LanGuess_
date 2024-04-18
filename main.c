@@ -48,7 +48,10 @@ int main(void)
         // Einleitungstext
         // Farbdarstellung entsprechend Makros
         printf(GRUEN "Willkommen!" RESET "\n\n");
-        printf("Sie haben %i Versuche, um das gesuchte Wort mit %i Buchstaben zu erraten ...\n", versuche, wortlaenge);
+        printf("Sie haben %i Versuche, um das gesuchte Wort mit %i Buchstaben zu erraten ...\n\n", versuche, wortlaenge);
+        printf(GRUEN "o" RESET " = Buchstabe steht an korrekter Position im Wort\n");
+        printf(GELB "o" RESET " = Buchstabe kommt an anderer Position im Wort vor\n");
+        printf(ROT "o" RESET " = Buchstabe kommt nicht im Wort vor\n");
         ausgabe_linie(77);
 
         //======================================================//
