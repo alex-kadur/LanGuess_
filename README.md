@@ -1,25 +1,29 @@
-[English](#_)
+# LanGuess_
 
-# LinGuess_
+---
+
+## Deutsch
+
+[English](#english)
 
 ## Ein Worträtselspiel
 
-LinGuess_ ist ein Worträtselspiel vergleichbar mit 'Wordle'. Spieler versuchen, ein Wort innerhalb einer begrenzten Anzahl von Versuchen zu erraten. Das Spiel wurde ursprünglich als Lösung für eines der Problemsets von [CS50’s Introduction to Computer Science](https://cs50.harvard.edu/x/2023/psets/2/wordle50/) erstellt. Das Spiel ähnelt dieser ursprünglichen Lösung noch teilweise, wurde jedoch stark modifiziert und erweitert, um Abhängigkeiten zu entfernen, die Spiellogik zu verfeinern und Funktionalitäten hinzuzufügen.
+LanGuess_ ist ein Worträtselspiel vergleichbar mit 'Wordle'. Spieler versuchen, ein Wort innerhalb einer begrenzten Anzahl von Versuchen zu erraten. Das Spiel wurde ursprünglich als Lösung für eines der Problemsets von [CS50’s Introduction to Computer Science](https://cs50.harvard.edu/x/2023/psets/2/wordle50/) erstellt. Das Spiel ähnelt dieser ursprünglichen Lösung noch teilweise, wurde jedoch stark modifiziert und erweitert, um Abhängigkeiten zu entfernen, die Spiellogik zu verfeinern und Funktionalitäten hinzuzufügen.
 
 Diese README enthält umfassende Informationen zur Verwendung des Programms, seiner Struktur und der Logik hinter verschiedenen Funktionalitäten.
 
 ## Inhaltsverzeichnis
 
-- [Übersicht](#Übersicht)
+- [Ubersicht](#ubersicht)
 - [Installation](#installation)
 - [Verwendung](#verwendung)
-- [Funktionalität](#Funktionalität)
+- [Funktionalität](#funktionalität)
 - [Spiellogik](#spiellogik)
 - [Autor](#autor)
-- [Danksagung](#Danksagungen)
+- [Danksagung](#danksagung)
 - [Lizenz](#lizenz)
 
-## Übersicht
+## Ubersicht
 
 Das Programm ist in C geschrieben und besteht aus mehreren Dateien:
 
@@ -33,7 +37,7 @@ Das Programm ist in C geschrieben und besteht aus mehreren Dateien:
 Um das Programm zu kompilieren und auszuführen, befolgen Sie die folgenden Schritte (Linux):
 
 1. Klonen Sie das Repository: `git clone <repository-url>`
-2. Navigieren Sie zum Verzeichnis: `cd LinGuess_`
+2. Navigieren Sie zum Verzeichnis: `cd LanGuess_`
 3. Kompilieren Sie das Programm: `gcc main.c -o LinGuess`
 4. Führen Sie die ausführbare Datei aus: `./LinGuess`
 
@@ -86,7 +90,7 @@ Die Spiellogik dreht sich um folgende Schritte:
 
 ## Autor
 
-LinGuess_ wurde von Alexander Kadur erstellt.
+LanGuess_ wurde von Alexander Kadur erstellt.
 
 ## Danksagung
 
@@ -102,20 +106,20 @@ Copyright 2024 Alexander Kadur
 
 ---
 
-### _
+## English
 
-# LinGuess_
+[Deutsch](#deutsch)
 
 ## A Word Guessing Game
 
-LinGuess_ is a word guessing game similar to 'Wordle'. Players try to guess a word within a limited number of attempts. The game was originally created as a solution for one of the problem sets of [CS50’s Introduction to Computer Science](https://cs50.harvard.edu/x/2023/psets/2/wordle50/]). The game still resembles this original solution to some extend but was later modified and extended to remove dependencies, refine the game logic and add functionality.
+LanGuess_ is a word guessing game similar to 'Wordle'. Players try to guess a word within a limited number of attempts. The game was originally created as a solution for one of the problem sets of [CS50’s Introduction to Computer Science](https://cs50.harvard.edu/x/2023/psets/2/wordle50/]). The game still resembles this original solution to some extend but was later modified and extended to remove dependencies, refine the game logic and add functionality.
 
 This README provides comprehensive information on how to use the program, its structure and the logic behind different functionalities.
 
 ## Table of Contents
 
 - [Overview](#overview)
-- [Installation](#installation)
+- [Setup](#setup)
 - [Usage](#usage)
 - [Functionality](#functionality)
 - [Game Logic](#game-logic)
@@ -132,12 +136,12 @@ The program is written in C and consists of several files:
 - `utility_functions.h`: Header file containing utility functions.
 - `files/`: A repository that holds text files (`5.txt`, `6.txt`, `7.txt`, `8.txt`) containing lists of words with lengths specified in the file names.
 
-## Installation
+## Setup
 
 To compile and run the program, follow these steps:
 
 1. Clone the repository: `git clone <repository-url>`
-2. Navigate to the directory: `cd LinGuess_`
+2. Navigate to the directory: `cd LanGuess_`
 3. Compile the program: `gcc main.c -o LinGuess`
 4. Run the executable: `./LinGuess`
 
@@ -191,7 +195,7 @@ The game logic revolves around the following steps:
 
 ## Author
 
-LinGuess_ was created by Alexander Kadur.
+LanGuess_ was created by Alexander Kadur.
 
 ## Acknowledgements
 
