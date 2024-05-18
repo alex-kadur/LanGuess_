@@ -78,3 +78,14 @@ void leere_screen(void)
     system("clear");
 #endif
 }
+
+//======================================================//
+
+// Wartet auf Nutzereingabe
+void warte_auf_eingabe(void)
+{
+    printf("\nWeiter mit Enter ...");
+    leere_eingabepuffer();    
+}
+
+//======================================================//

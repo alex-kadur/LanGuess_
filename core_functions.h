@@ -45,13 +45,16 @@ void ausgabe_titel(void)
     leere_screen();
 
     printf("\n\n");
-    printf(GRUEN "██╗      █████╗ ███╗   ██╗" GELB " ██████╗ ██╗   ██╗███████╗███████╗███████╗" ROT "        " RESET "\n");
-    printf(GRUEN "██║     ██╔══██╗████╗  ██║" GELB "██╔════╝ ██║   ██║██╔════╝██╔════╝██╔════╝" ROT "        " RESET "\n");
-    printf(GRUEN "██║     ███████║██╔██╗ ██║" GELB "██║  ███╗██║   ██║█████╗  ███████╗███████╗" ROT "        " RESET "\n");
-    printf(GRUEN "██║     ██╔══██║██║╚██╗██║" GELB "██║   ██║██║   ██║██╔══╝  ╚════██║╚════██║" ROT "        " RESET "\n");
-    printf(GRUEN "███████╗██║  ██║██║ ╚████║" GELB "╚██████╔╝╚██████╔╝███████╗███████║███████║" ROT "███████╗" RESET "\n");
-    printf(GRUEN "╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝" GELB " ╚═════╝  ╚═════╝ ╚══════╝╚══════╝╚══════╝" ROT "╚══════╝" RESET "\n");
-    printf("\n\n");
+    printf(GRUEN "                            " RESET "         " ROT "                                           " RESET "\n");
+    printf(GRUEN "  ██╗      █████╗ ███╗   ██╗" RESET " ██████╗ " ROT "██╗   ██╗███████╗███████╗███████╗          " RESET "\n");
+    printf(GRUEN "  ██║     ██╔══██╗████╗  ██║" RESET "██╔════╝ " ROT "██║   ██║██╔════╝██╔════╝██╔════╝          " RESET "\n");
+    printf(GRUEN "  ██║     ███████║██╔██╗ ██║" RESET "██║  ███╗" ROT "██║   ██║█████╗  ███████╗███████╗          " RESET "\n");
+    printf(GRUEN "  ██║     ██╔══██║██║╚██╗██║" RESET "██║   ██║" ROT "██║   ██║██╔══╝  ╚════██║╚════██║          " RESET "\n");
+    printf(GRUEN "  ███████╗██║  ██║██║ ╚████║" RESET "╚██████╔╝" ROT "╚██████╔╝███████╗███████║███████║███████╗  " RESET "\n");
+    printf(GRUEN "  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝" RESET " ╚═════╝ " ROT " ╚═════╝ ╚══════╝╚══════╝╚══════╝╚══════╝  " RESET "\n");
+    printf(GRUEN "                            " RESET "         " ROT "                                           " RESET "\n");
+
+    printf("\n");
 }
 
 //======================================================//
@@ -78,19 +81,32 @@ void eingabe_wortlaenge(int *wortlaenge)
 //======================================================//
 
 // Oeffnet Datei entsprechend Wortlaenge
+int oeffne_datei(int wortlaenge)
+{
+    char dateiname[50];
+
+    sprintf(dateiname, "files/%i.txt", wortlaenge);
+
+    FILE *wortliste = fopen(dateiname, "r");
+
+    if (wortliste == NULL)
+    {
+        return 1;
+    }
+    
+    return 0;
+}
+
+
+
 // Speichert Woerter aus Datei in Array 'optionen'
 // Waehlt (pseudo)zufaellig 1 Wort aus
 // Speichert auswahl in 'auswahl'
 int eingabe_auswahl(int wortlaenge, char auswahl[])
 {
     // Datei entsprechend Wortlaenge oeffnen
-    char dateiname[50];
-    sprintf(dateiname, "files/%i.txt", wortlaenge);
-    FILE *wortliste = fopen(dateiname, "r");
-    if (wortliste == NULL)
-    {
-        return 1;
-    }
+    oeffne_datei(wortlaenge);
+
 
     // Woerter aus Datei in Array mit LISTELAENGE speichern
     char optionen[LISTELAENGE][wortlaenge + 1];

@@ -18,10 +18,15 @@ int main(void)
     do
     {
         // Gibt Titel in ASCII-Darstellung aus
+        // Wartet auf Eingabe
         ausgabe_titel();
+        warte_auf_eingabe();
+        leere_screen();
 
         // Abfrage Wortlaenge
         // Speichert Eingabe in 'wortlaenge'
+        printf(GRUEN "Willkommen!" RESET "\n\n");
+        printf("Wie lang soll das gesuchte Wort sein?\n\n");
         int wortlaenge;
         eingabe_wortlaenge(&wortlaenge);
 
@@ -47,7 +52,7 @@ int main(void)
 
         // Einleitungstext
         // Farbdarstellung entsprechend Makros
-        printf(GRUEN "Willkommen!" RESET "\n\n");
+        printf(GRUEN "Los geht's!" RESET "\n\n");
         printf("Sie haben %i Versuche, um das gesuchte Wort mit %i Buchstaben zu erraten ...\n\n", versuche, wortlaenge);
         printf(GRUEN "o" RESET " = Buchstabe steht an korrekter Position im Wort\n");
         printf(GELB "o" RESET " = Buchstabe kommt an anderer Position im Wort vor\n");
