@@ -1,6 +1,6 @@
 # LanGuess_
 
-//---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Ein Worträtselspiel
 
@@ -19,7 +19,7 @@ Es wurden alle unnoetigen Abhängigkeiten entfernt, die Spiellogik deutlich verf
 - [Danksagung](#danksagung)
 - [Lizenz](#lizenz)
 
-//---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Ubersicht
 
@@ -37,6 +37,8 @@ Das Programm ist in C geschrieben und besteht aus mehreren Dateien:
 - `files/`: Ein Verzeichnis, das Textdateien (`optionen_5.txt`, `optionen_6.txt`, `optionen_7.txt`, `optionen_8.txt`) enthält, ...
 - ... die jeweils Listen von Wörtern mit in den Dateinamen angegebenen Längen enthalten.
 
+---
+
 ## Installation
 
 Um das Programm zu kompilieren und auszuführen, befolgen Sie die folgenden Schritte (Linux):
@@ -45,6 +47,8 @@ Um das Programm zu kompilieren und auszuführen, befolgen Sie die folgenden Schr
 2. Navigieren Sie zum Verzeichnis: `cd LanGuess_`
 3. Kompilieren Sie das Programm: gcc `gcc -Iinclude/ src/main.c src/utilities.c src/ui.c src/globals.c src/game.c src/data_operations.c -o languess`
 4. Führen Sie die Datei aus: `./languess`
+
+---
 
 ## Verwendung
 
@@ -59,7 +63,7 @@ Das eigentliche Spiel läuft entsprechend der nachfolgenden Schritte ab:
 - ... bis Sie entweder das Wort richtig erraten ...
 - ... oder keine Versuche mehr übrig sind.
 
-//---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Funktionalität
 
@@ -103,6 +107,8 @@ Die Funktionalität des Programms ergibt sich aus den oben genannten Dateien und
   - Konvertierung von Eingaben.
   - Pausieren des Programms.
 
+---
+
 ## Spiellogik
 
 Die Spiellogik dreht sich um folgende Schritte:
@@ -115,7 +121,7 @@ Die Spiellogik dreht sich um folgende Schritte:
    - Falsche/nicht vorkommende Buchstaben sind rot markiert.
 4. **Gewinnfeststellung**: Das Spiel geht weiter, bis der Spieler das Wort richtig geraten hat oder keine Versuche mehr übrig sind.
 
-//---------------------------------------------------------------------------------------------------------------------
+---
 
 ## Autor
 
@@ -127,10 +133,14 @@ Ich möchte dem Team hinter [CS50’s Introduction to Computer Science](https://
 
 Darüber hinaus möchte ich den Autoren und Beitragenden der Module und Bibliotheken, die für die Erstellung dieser Anwendung verwendet wurden, meine Dankbarkeit zeigen.
 
+Zuletzt gilt meine Dankbarkeit allen engagierten Lehrenden um Rahmen meiner Umschulung zum Fachinformatiker fuer Anwendungsentwicklung. 
+
+---
+
 ## Lizenz
 
 Dieses Projekt steht unter der MIT-Lizenz.
 
 Copyright 2024 Alexander Kadur
 
-//---------------------------------------------------------------------------------------------------------------------
+---
