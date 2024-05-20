@@ -43,7 +43,7 @@ Das Programm ist in C geschrieben und besteht aus mehreren Dateien:
 
 Um das Programm zu kompilieren und auszuführen, befolgen Sie die folgenden Schritte (Linux):
 
-1. Klonen Sie das Repository: `git clone <repository-url>`
+1. Klonen Sie das Repository: `git clone <https://github.com/alex-kadur/LanGuess_.git>`
 2. Navigieren Sie zum Verzeichnis: `cd LanGuess_`
 3. Kompilieren Sie das Programm: gcc `gcc -Iinclude/ src/main.c src/utilities.c src/ui.c src/globals.c src/game.c src/data_operations.c -o languess`
 4. Führen Sie die Datei aus: `./languess`
