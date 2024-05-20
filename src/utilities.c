@@ -1,10 +1,9 @@
-void ausgabe_linie(int lenght);
-void leere_eingabepuffer(void);
-int neue_runde(char *text);
-void umwandlung_kleinbuchstaben(char eingabe[]);
-void leere_screen(void);
+#include <stdio.h>
+#include <stdlib.h>
 
-//======================================================//
+#include "../include/utilities.h"
+
+//------------------FUNKTIONSIMPLEMENTIERUNGEN------------------//
 
 // Gibt eine Linie mit Breite entsprechend Uebergabewert aus
 void ausgabe_linie(int laenge)
@@ -22,23 +21,22 @@ void ausgabe_linie(int laenge)
     printf("\n");
 }
 
-//======================================================//
+//==================================================================================================
 
 // Leert den Eingabepuffer
 void leere_eingabepuffer()
 {
     int c;
-    while ((c = getchar()) != '\n' && c != EOF)
-        ;
+    while ((c = getchar()) != '\n' && c != EOF);
 }
 
-//======================================================//
+//==================================================================================================
 
 // Gibt String entsprechend Uebergabewert aus
 // Fordert Nutzer zur Eingabe (j/n) auf
 // Rueckgabewert 1 falls 'j' oder 'J'
 // Sonst Rueckgabewert 0
-int neue_runde(char *text)
+int auswahl_jn(char *text)
 {
     char temp;
     printf("%s (j/n) -> ", text);
@@ -51,26 +49,26 @@ int neue_runde(char *text)
     return 0;
 }
 
-//======================================================//
+//==================================================================================================
 
 // Wandelt Zeichen im Uebergabe-Array von Gross- zu Kleinbuchstaben um
 void umwandlung_kleinbuchstaben(char input[])
 {
     for (int i = 0; input[i] != '\0'; i++)
     {
-        // check if the character is an uppercase letter
+        // Prueft ob Zeichen Grossbuchstabe
         if (input[i] >= 'A' && input[i] <= 'Z')
         {
-            // convert to lowercase by adding 32 to the ASCII value
+            // Umwandlung in Kleinbuchstabe
             input[i] = input[i] + 32;
         }
     }
 }
 
-//======================================================//
+//==================================================================================================
 
 // Leert den Bildschirm unabhaengig vom Betriebssystem
-void leere_screen(void)
+void leere_bild(void)
 {
 #ifdef _WIN32
     system("cls");
@@ -79,13 +77,18 @@ void leere_screen(void)
 #endif
 }
 
-//======================================================//
+//==================================================================================================
 
 // Wartet auf Nutzereingabe
 void warte_auf_eingabe(void)
 {
     printf("\nWeiter mit Enter ...");
+
+    // Warte auf Nutzereingabe
+    getchar();
+
+    // Leere Eingabepuffer
     leere_eingabepuffer();    
 }
 
-//======================================================//
+//==================================================================================================

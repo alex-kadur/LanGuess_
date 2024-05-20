@@ -1,128 +1,93 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include <time.h>
-#include "utility_functions.h"
 
-// Jede Textdatei beinhalted exakt LISTELAENGE Woerter
-#define LISTELAENGE 50
+#include "../include/game.h"
 
-// Werte fuer Farben und wertung
-// TREFFER == korrekter Buchstabe an korrekter Position; priorisierte Darstellung
-// FAST == Buchstabe kommt an abweichender Position vor; beruecksichtigt Anzahl Vorkommen; nachrangige Darstellung
-// FALSCH == Buchstabe kommt nicht im Wort vor; Default-Wert
-#define TREFFER 2
-#define FAST 1
-#define FALSCH 0
+#include "../include/constants.h"
+#include "../include/utilities.h"
+#include "../include/colors.h"
 
-// ANSI Farbcodes Zeichen und Hintergrund
-#define GRUEN "\e[38;2;255;255;255;1m\e[48;2;0;127;0;1m"
-#define GELB "\e[38;2;255;255;255;1m\e[48;2;127;127;0;1m"
-#define ROT "\e[38;2;255;255;255;1m\e[48;2;127;0;0;1m"
-#define RESET "\e[0;39m"
+//------------------BESCHREIBUNG------------------//
 
-//======================================================//
+// Funktionen zur Durchfuehrung des eigentlichen Spiels
 
-// Funktionsprototypen
-void ausgabe_titel();
-void eingabe_wortlaenge(int *wortlaenge);
-int eingabe_auswahl(int wortlaenge, char auswahl[]);
-void eingabe_versuch(char versuch[], int wortlaenge);
-void zaehle_buchstabe(char wort[], int wortlaenge, int zaehler[]);
-int verarbeite_korrekt(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge);
-int verarbeite_fast(char versuch[], char auswahl[], int status[], int auswahl_zaehler[], int wortlaenge);
-int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[]);
-void ausgabe_wort(char versuch[], int wortlaenge, int status[]);
-void ausgabe_ergebnis(int gewonnen, char auswahl[]);
+// Gibt Legende aus
+// Startet eine Schleife mit max. Wortlaenge + 1 Durchlaufen
+    // Pro Durchlauf:
+    // Fordert Nutzer zur Eingabe eines Wortes auf
+    // Vergibt zunaechst fuer jede Position im Wort den Status FALSCH
+    // Vergleicht Nutzereingabe mit Zufallswort dieser Runde
+    // Fuer jede Position im Wort:
+    // Aktualisiert Status entsprechend KORREKT oder FAST (siehe Kommentare zur funktion)
+    // Aktualisiert Gesamtwertung entsprechend
 
-//======================================================//
+//------------------FUNKTIONSIMPLEMENTIERUNGEN------------------//
 
-// Gibt den Titel als ASCII-Design aus
-// Nutzt Macros zum Farbwechsel/-reset
-void ausgabe_titel(void)
+int starte_spiel(int wortlaenge, char auswahl[])
 {
-    leere_screen();
 
-    printf("\n\n");
-    printf(GRUEN "                            " RESET "         " ROT "                                           " RESET "\n");
-    printf(GRUEN "  ██╗      █████╗ ███╗   ██╗" RESET " ██████╗ " ROT "██╗   ██╗███████╗███████╗███████╗          " RESET "\n");
-    printf(GRUEN "  ██║     ██╔══██╗████╗  ██║" RESET "██╔════╝ " ROT "██║   ██║██╔════╝██╔════╝██╔════╝          " RESET "\n");
-    printf(GRUEN "  ██║     ███████║██╔██╗ ██║" RESET "██║  ███╗" ROT "██║   ██║█████╗  ███████╗███████╗          " RESET "\n");
-    printf(GRUEN "  ██║     ██╔══██║██║╚██╗██║" RESET "██║   ██║" ROT "██║   ██║██╔══╝  ╚════██║╚════██║          " RESET "\n");
-    printf(GRUEN "  ███████╗██║  ██║██║ ╚████║" RESET "╚██████╔╝" ROT "╚██████╔╝███████╗███████║███████║███████╗  " RESET "\n");
-    printf(GRUEN "  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═══╝" RESET " ╚═════╝ " ROT " ╚═════╝ ╚══════╝╚══════╝╚══════╝╚══════╝  " RESET "\n");
-    printf(GRUEN "                            " RESET "         " ROT "                                           " RESET "\n");
+        // Erlaubt 'wortlaenge + 1 Versuche
+        int versuche = wortlaenge + 1;
 
-    printf("\n");
-}
+        // Bestimmt am Spielende Ergebnis
+        // Wert initial ist 0 (verloren)
+        int gewonnen = 0;
 
-//======================================================//
+        // Einleitungstext
+        // Farbdarstellung entsprechend Makros
+        printf(GRUEN "Los geht's!" RESET "\n\n");
+        printf("Sie haben %i Versuche, um das gesuchte Wort mit %i Buchstaben zu erraten ...\n\n", versuche, wortlaenge);
+        printf(GRUEN "o" RESET " = Buchstabe steht an korrekter Position im Wort\n");
+        printf(GELB "o" RESET " = Buchstabe kommt an anderer Position im Wort vor\n");
+        printf(ROT "o" RESET " = Buchstabe kommt nicht im Wort vor\n");
+        ausgabe_linie(77);
 
-// Fragt von Nutzer die Wortlaenge ab und ...
-// ... stellt sicher, dass Eingabe 5, 6, 7, oder 8 ist
-// Speichert Wert ueber Pointer in 'wortlaenge'
-void eingabe_wortlaenge(int *wortlaenge)
-{
-    do
-    {
-        printf("Wortlaenge (5, 6, 7, oder 8): ");
-        scanf("%d", wortlaenge);
-        leere_eingabepuffer();
-
-        if (*wortlaenge < 5 || *wortlaenge > 8)
+        // Schleife mit einem Durchlauf pro Versuch
+        for (int i = 0; i < versuche; i++)
         {
-            printf("Wortlaenge muss 5, 6, 7, oder 8 sein!\n\n");
+            // Abfrage des aktuellen Versuchs
+            char versuch[wortlaenge + 1];
+            eingabe_versuch(versuch, wortlaenge);
+
+            // Array, dass spaeter die Auswertung der einzelnen Buchstaben enthaelt
+            int status[wortlaenge];
+
+            // Setzt alle Elemente des Arrys 'status' initial auf FALSCH (0)
+            for (int j = 0; j < wortlaenge; j++)
+            {
+                status[j] = FALSCH;
+            }
+
+            // Vergleicht 'versuch' mit 'auswahl'
+            // Vergibt entsprechend Punkte entsprechend Makros
+            // Speichert Summe Punkte in 'wertung'
+            int wertung = pruefe_wort(versuch, wortlaenge, status, auswahl);
+
+            // Ausgabe Wort 'versuch' Buchstabe fuer Buchstabe
+            // Farbdarstellung entsprechend uebereinstimmung 'status' mit Makro-Werten
+            printf("%d. versuch: ", i + 1);
+            ausgabe_wort(versuch, wortlaenge, status);
+
+            // Falls Summe Wertung Versuch == TREFFER * 'wortlaenge' ...
+            // ... ueberschreibt 'gewonnen' mit 1
+            pruefe_gewonnen(&gewonnen, wertung, wortlaenge);
+
+            if (gewonnen)
+            {
+                break;
+            }
         }
 
-    } while (*wortlaenge < 5 || *wortlaenge > 8);
+        ausgabe_linie(77);
+
+        // Ausgabe des Ergebnisses je nach Wert 'gewonnen'
+        // 1 gewonnen
+        // 0 verloren
+        ausgabe_ergebnis(gewonnen, auswahl);
 }
 
-//======================================================//
-
-// Oeffnet Datei entsprechend Wortlaenge
-int oeffne_datei(int wortlaenge)
-{
-    char dateiname[50];
-
-    sprintf(dateiname, "files/%i.txt", wortlaenge);
-
-    FILE *wortliste = fopen(dateiname, "r");
-
-    if (wortliste == NULL)
-    {
-        return 1;
-    }
-    
-    return 0;
-}
-
-
-
-// Speichert Woerter aus Datei in Array 'optionen'
-// Waehlt (pseudo)zufaellig 1 Wort aus
-// Speichert auswahl in 'auswahl'
-int eingabe_auswahl(int wortlaenge, char auswahl[])
-{
-    // Datei entsprechend Wortlaenge oeffnen
-    oeffne_datei(wortlaenge);
-
-
-    // Woerter aus Datei in Array mit LISTELAENGE speichern
-    char optionen[LISTELAENGE][wortlaenge + 1];
-    for (int i = 0; i < LISTELAENGE; i++)
-    {
-        fscanf(wortliste, "%s", optionen[i]);
-    }
-
-    // (pseudo)zufaellig 1 Wort auswaehlen
-    srand(time(NULL));
-    strcpy(auswahl, optionen[rand() % LISTELAENGE]);
-
-    return 0;
-}
-
-//======================================================//
+//==================================================================================================
 
 // Speichert Nutzereingabe in Array 'versuch'
 void eingabe_versuch(char versuch[], int wortlaenge)
@@ -144,7 +109,7 @@ void eingabe_versuch(char versuch[], int wortlaenge)
     strcpy(versuch, temp);
 }
 
-//======================================================//
+//==================================================================================================
 
 // Hilfsfunktion fuer pruefe_wort()
 // Zaehlt das vorkommen der Buchstaben in einem Wort
@@ -239,7 +204,7 @@ int pruefe_wort(char versuch[], int wortlaenge, int status[], char auswahl[])
     return wertung;
 }
 
-//======================================================//
+//==================================================================================================
 
 // Ausgabe Wort 'versuch' Buchstabe fuer Buchstabe
 // Farbdarstellung entsprechend uebereinstimmung 'status' mit Makro-Werten
@@ -263,7 +228,7 @@ void ausgabe_wort(char versuch[], int wortlaenge, int status[])
     printf("\n");
 }
 
-//======================================================//
+//==================================================================================================
 
 // Falls Summe Wertung Versuch == TREFFER * 'wortlaenge' ...
 // ... ueberschreibt 'gewonnen' mit 1
@@ -275,7 +240,7 @@ void pruefe_gewonnen(int *gewonnen, int wertung, int wortlaenge)
     }
 }
 
-//======================================================//
+//==================================================================================================
 
 // Gibt das Ergebnis der Runde aus
 void ausgabe_ergebnis(int gewonnen, char auswahl[])
@@ -291,4 +256,4 @@ void ausgabe_ergebnis(int gewonnen, char auswahl[])
     }
 }
 
-//======================================================//
+//==================================================================================================
