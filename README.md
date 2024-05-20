@@ -59,9 +59,7 @@ Das eigentliche Spiel läuft entsprechend der nachfolgenden Schritte ab:
    - Richtige Buchstaben an der richtigen Position sind grün markiert.
    - Richtige Buchstaben an der falschen Position sind gelb markiert.
    - Falsche Buchstaben sind rot markiert.
-3. Fahren Sie mit dem Raten solange fort, ...
-- ... bis Sie entweder das Wort richtig erraten ...
-- ... oder keine Versuche mehr übrig sind.
+3. Fahren Sie mit dem Raten solange fort, bis Sie entweder das Wort richtig erraten oder keine Versuche mehr übrig sind.
 
 ---
 
@@ -73,7 +71,7 @@ Die Funktionalität des Programms ergibt sich aus den oben genannten Dateien und
 
 - `main.c` enthält die Hauptfunktion, in der die Spielausführung beginnt.
 
-### Spiellogik
+### Spiel
 
 - `game.c` definiert Funktionen, die für die Kernspielmechanik verantwortlich sind, einschließlich:
 
@@ -127,13 +125,15 @@ Die Spiellogik dreht sich um folgende Schritte:
 
 LanGuess_ wurde von Alexander Kadur erstellt.
 
+---
+
 ## Danksagung
 
 Ich möchte dem Team hinter [CS50’s Introduction to Computer Science](https://cs50.harvard.edu/x/2023/) meinen Dank und meine Anerkennung aussprechen.
 
 Darüber hinaus möchte ich den Autoren und Beitragenden der Module und Bibliotheken, die für die Erstellung dieser Anwendung verwendet wurden, meine Dankbarkeit zeigen.
 
-Zuletzt gilt meine Dankbarkeit allen engagierten Lehrenden um Rahmen meiner Umschulung zum Fachinformatiker fuer Anwendungsentwicklung. 
+Zuletzt gilt meine Dankbarkeit allen engagierten Lehrenden um Rahmen meiner Umschulung zum Fachinformatiker fuer Anwendungsentwicklung.
 
 ---
 
