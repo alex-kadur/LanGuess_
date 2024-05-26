@@ -24,7 +24,7 @@ void aktualisieren_datei_name()
 
 // Aktualisieren der Optionenliste nach Änderung der Wortlänge
 void aktualisieren_optionen_liste()
-{   
+{
     // Gibt den für die Knoten in der Liste allokierten Speicher frei
     free_optionen_liste();
 
@@ -107,11 +107,11 @@ void einlesen_optionen_datei()
         }
         else
         {
-            // Andernfalls wird der neue Knoten an das Ende der Liste angehängt 
+            // Andernfalls wird der neue Knoten an das Ende der Liste angehängt
             struct knoten *aktuell = optionen;
             // Schleife bis zum letzten Knoten
             while (aktuell->naechste != NULL)
-            {   
+            {
                 // Gehe zum nächsten Knoten
                 aktuell = aktuell->naechste;
             }
@@ -138,7 +138,7 @@ void hinzufuegen_option_liste()
 
     // Überprüft, ob die Länge des Worts korrekt ist
     if (strlen(puffer) != wort_laenge)
-    {   
+    {
         // ggf. Fehlermeldung ausgeben
         printf("\n\n" ROT "Fehler: Wortlaenge muss %d sein." RESET "\n", wort_laenge);
 
@@ -165,7 +165,7 @@ void hinzufuegen_option_liste()
 
     // Wenn die Liste leer ist, wird der neue Knoten das erste Element
     if (optionen == NULL)
-    {   
+    {
         // Setze den neuen Knoten als erstes Element
         optionen = neuer_knoten;
     }
@@ -204,7 +204,7 @@ void loeschen_option_liste()
     if (liste_leer())
     {
         return;
-    }   
+    }
 
     // Gibt die Liste der Wörter nummeriert aus
     ausgeben_optionen_liste();
@@ -263,7 +263,7 @@ void loeschen_option_liste()
     }
 
     // Entfernt das Wort aus der Liste
-    
+
     // Wenn 'vorherige' NULL ist, dann ist 'aktuell' das erste Element
     if (vorherige == NULL)
     {
@@ -299,38 +299,52 @@ void select_option_zufall()
     }
 
     // Wählt eine zufällige Option aus der Liste
+    // Wiederholung bis das zufällige Wort gefunden nicht dem aktuell in 'option_zufall' entspricht
+
+    struct knoten *aktuell;
+
+    // Sicherung gegen Endlosschleife
+    // Szenario: Wenn die Liste nur ein Element enthält und dieses Element ausgewählt wird
+    int sicherung = 0;
 
     // Initialisiert 'aktuell' als erstes Element
-    struct knoten *aktuell = optionen;
-    // Initialisiere 'zaehler' auf 1
-    int zaehler = 1;
-    // Schleife bis zum letzten Knoten
-    while (aktuell->naechste != NULL)
+    do
     {
-        // Gehe zum nächsten Knoten
-        aktuell = aktuell->naechste;
-        // Erhöhe den Zähler
-        zaehler++;
-    }
 
-    // Generiert eine zufällige Nummer zwischen 1 und der Anzahl der Knoten in der Liste
-    // Initialisiert den Zufallszahlengenerator
-    srand(time(NULL));
-    // rand() gibt eine zufällige Zahl zurück
-    int random = rand() % zaehler + 1;
+        // Initialisiert 'aktuell' als erstes Element
+        aktuell = optionen;
+        // Initialisiere 'zaehler' auf 1
+        int zaehler = 1;
+        // Schleife bis zum letzten Knoten
+        while (aktuell->naechste != NULL)
+        {
+            // Gehe zum nächsten Knoten
+            aktuell = aktuell->naechste;
+            // Erhöhe den Zähler
+            zaehler++;
+        }
 
-    // Setzt 'aktuell' auf das erste Element
-    aktuell = optionen;
-    // Setzt 'zaehler' auf 1
-    zaehler = 1;
-    // Schleife bis zum zufälligen Knoten
-    while (aktuell != NULL && zaehler < random)
-    {
-        // Gehe zum nächsten Knoten
-        aktuell = aktuell->naechste;
-        // Erhöhe den Zähler
-        zaehler++;
-    }
+        // Generiert eine zufällige Nummer zwischen 1 und der Anzahl der Knoten in der Liste
+        // Initialisiert den Zufallszahlengenerator
+        srand(time(NULL));
+        // rand() gibt eine zufällige Zahl zurück
+        int random = rand() % zaehler + 1;
+
+        // Setzt 'aktuell' auf das erste Element
+        aktuell = optionen;
+        // Setzt 'zaehler' auf 1
+        zaehler = 1;
+
+        // Schleife bis zum zufälligen Knoten
+        while (aktuell != NULL && zaehler < random)
+        {
+            // Gehe zum nächsten Knoten
+            aktuell = aktuell->naechste;
+            // Erhöhe den Zähler
+            zaehler++;
+        }
+
+    } while (strcmp(aktuell->option.wort, option_zufall) == 0 && sicherung++ < 1);
 
     // Kopiert das zufällige Wort in 'option_zufall'
     strcpy(option_zufall, aktuell->option.wort);

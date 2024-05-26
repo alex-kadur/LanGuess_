@@ -58,30 +58,35 @@ void haupt_menu()
     printf(GRUEN "HAUPTMENUE" RESET "\n\n");
     printf("1. Spielen\n");
     printf("2. Wortlaenge Anpassen\n");
-    printf("3. Optionen Verwalten\n");
-    printf("4. Beenden\n");
+    printf("3. Optionen Verwalten\n\n");
+    printf("X. Beenden\n");
 
     // Initialisiert Variable fuer Nutzereingabe
-    int choice;
+    char choice;
 
     // Fragt Nutzer nach Eingabe und speichert in Variable 'choice'
     printf("\nAuswahl: ");
-    scanf("%d", &choice);
+    scanf(" %c", &choice);
+
+    leere_eingabepuffer;
+
+    if (choice == 'x' || choice == 'X')
+    {
+        programm_beenden_bild();
+        return;
+    }
 
     // Userauswahl verarbeiten
     switch (choice)
     {
-    case 1:
+    case '1':
         spiel();
         break;
-    case 2:
+    case '2':
         wort_laenge_bild();
         break;
-    case 3:
+    case '3':
         verwalte_optionen_menu();
-        break;
-    case 4:
-        programm_beenden_bild();
         break;
     default:
         // Fehlermeldung bei ungueltiger Eingabe
@@ -151,6 +156,12 @@ void spiel()
         // Leert den Bildschirm
         leere_bild();
 
+        if (liste_leer())
+        {
+            // Rueckkehr zum Hauptmenue
+            haupt_menu();
+        }
+
         // Zufaelliges Wort aus Optionenliste auswaehlen ...
         // ... und in 'option_zufall' speichern
         select_option_zufall();
@@ -158,7 +169,7 @@ void spiel()
         // Startet das Spiel mit zufaelligem Wort
         starte_spiel(wort_laenge, option_zufall);
 
-    // Schleife wird durch Nutzereingabe beendet
+        // Schleife wird durch Nutzereingabe beendet
     } while (auswahl_jn("Noch eine Runde?"));
 
     // Rueckkehr zum Hauptmenue
@@ -178,33 +189,37 @@ void verwalte_optionen_menu()
     printf("1. Option Hinzufuegen\n");
     printf("2. Option Entfernen\n");
     printf("3. Optionen Anzeigen\n");
-    printf("4. Speichern\n");
-    printf("5. Zurueck\n");
+    printf("4. Speichern\n\n");
+    printf("X. Zurueck\n");
 
     // initialisiert Variable fuer Nutzereingabe
-    int choice;
+    char choice;
 
     // Fragt Nutzer nach Eingabe und speichert in Variable 'choice'
     printf("\nAuswahl: ");
-    scanf("%d", &choice);
+    scanf(" %c", &choice);
+    leere_eingabepuffer;
+
+    if (choice == 'x' || choice == 'X')
+    {
+        haupt_menu();
+        return;
+    }
 
     // Userauswahl verarbeiten
     switch (choice)
     {
-    case 1:
+    case '1':
         option_hinzufuegen_bild();
         break;
-    case 2:
+    case '2':
         option_entfernen_bild();
         break;
-    case 3:
+    case '3':
         optionen_ausgeben_bild();
         break;
-    case 4:
+    case '4':
         optionen_speichern_bild();
-        break;
-    case 5:
-        haupt_menu();
         break;
     default:
         // Fehlermeldung bei ungueltiger Eingabe
