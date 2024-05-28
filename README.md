@@ -133,7 +133,7 @@ Ich möchte dem Team hinter [CS50’s Introduction to Computer Science](https://
 
 Darüber hinaus möchte ich den Autoren und Beitragenden der Module und Bibliotheken, die für die Erstellung dieser Anwendung verwendet wurden, meine Dankbarkeit zeigen.
 
-Zuletzt gilt meine Dankbarkeit allen engagierten Lehrenden um Rahmen meiner Umschulung zum Fachinformatiker fuer Anwendungsentwicklung.
+Zuletzt gilt meine Dankbarkeit allen engagierten Lehrenden im Rahmen meiner Umschulung zum Fachinformatiker fuer Anwendungsentwicklung.
 
 ---
 
